@@ -25,17 +25,17 @@ export default function Home() {
   );
 
   // Get contract data from staking contract
-  const { data: rewardTokenAddress } = useContractRead(staking, "0xe3Da8fb40ca5df4868B36796031B45c6F65F0bdb");
+  const { data: rewardTokenAddress } = useContractRead(staking, "rewardToken");
   const { data: stakingTokenAddress } = useContractRead(
     staking,
-    "0xe3Da8fb40ca5df4868B36796031B45c6F65F0bdb"
+    "stakingToken"
   );
 
   // Initialize token contracts
   const { contract: stakingToken, isLoading: isStakingTokenLoading } =
-    useContract(stakingTokenAddress, "0xe3Da8fb40ca5df4868B36796031B45c6F65F0bdb");
+    useContract(stakingTokenAddress, "token");
   const { contract: rewardToken, isLoading: isRewardTokenLoading } =
-    useContract(rewardTokenAddress, "0xe3Da8fb40ca5df4868B36796031B45c6F65F0bdb");
+    useContract(rewardTokenAddress, "token");
 
   // Token balances
   const { data: stakingTokenBalance, refetch: refetchStakingTokenBalance } =
@@ -95,10 +95,10 @@ export default function Home() {
                 "stake",
                 [ethers.utils.parseEther(amountToStake)]
               );
-              alert("Miners staked successfully!");
+              alert("Tokens staked successfully!");
             }}
           >
-            Stake Miners!
+            Stake!
           </Web3Button>
 
           <Web3Button
@@ -109,21 +109,21 @@ export default function Home() {
                 "withdraw",
                 [ethers.utils.parseEther(amountToStake)]
               );
-              alert("Miners unstaked successfully!");
+              alert("Tokens unstaked successfully!");
             }}
           >
-            Unstake Miners!
+            Unstake!
           </Web3Button>
 
           <Web3Button
             className={styles.button}
             contractAddress={stakingContractAddress}
             action={async (contract) => {
-              await contract.call("claimMiners", []);
-              alert("Miners claimed successfully!");
+              await contract.call("claimRewards", []);
+              alert("Rewards claimed successfully!");
             }}
           >
-            Claim Miner rewards!
+            Claim rewards!
           </Web3Button>
         </div>
 
@@ -146,7 +146,7 @@ export default function Home() {
           </a>
 
           <a className={styles.card}>
-            <h2>Current Miner reward</h2>
+            <h2>Current reward</h2>
             <p>
               {stakeInfo && ethers.utils.formatEther(stakeInfo[1].toString())}
             </p>
